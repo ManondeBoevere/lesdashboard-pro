@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173b57">
+  <title>LesDashboard Pro | Duits H2 & H3</title>
+  <style>
+    :root{
+      --navy:#173b57; --blue:#276a8f; --sky:#e8f4fa; --cream:#fffaf0;
+      --yellow:#ffd166; --green:#2a9d8f; --red:#e76f51; --ink:#18313f;
+      --muted:#67808e; --card:#ffffff; --bg:#f3f7f9; --line:#dbe6eb;
+      --shadow:0 10px 28px rgba(23,59,87,.11); --radius:20px;
+      --font-size:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;font-size:var(--font-size);color:var(--ink);background:var(--bg)}
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+    .app{min-height:100vh;display:grid;grid-template-columns:280px 1fr}
+    .sidebar{background:linear-gradient(175deg,var(--navy),#102c42);color:white;padding:22px;position:sticky;top:0;height:100vh;overflow:auto;z-index:10}
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:22px}.brand-icon{font-size:38px}.brand h1{font-size:22px;margin:0}.brand small{opacity:.75}
+    .class-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 24px}
+    .class-btn,.nav-btn,.side-action{border:0;border-radius:12px;padding:12px;color:white;background:rgba(255,255,255,.10);text-align:left;transition:.2s}
+    .class-btn{text-align:center;font-weight:800;font-size:20px}.class-btn.active{background:var(--yellow);color:#20313a;transform:translateY(-2px)}
+    .nav{display:grid;gap:7px}.nav-btn:hover,.nav-btn.active,.side-action:hover{background:rgba(255,255,255,.2)}
+    .side-footer{margin-top:24px;display:grid;gap:8px}.side-action{width:100%;font-size:15px}
+    .main{min-width:0;padding:24px 30px 48px}
+    .topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}.date-de{font-weight:800;color:var(--blue)}.date-nl{font-size:14px;color:var(--muted);margin-top:4px}
+    .top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .icon-btn,.primary,.secondary,.danger{border:0;border-radius:12px;padding:10px 14px;font-weight:700}.icon-btn,.secondary{background:white;color:var(--ink);box-shadow:0 3px 12px rgba(23,59,87,.08)}.primary{background:var(--blue);color:white}.danger{background:#fff0ec;color:#a63b25}.icon-btn:hover,.secondary:hover{background:var(--sky)}
+    .hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;border-radius:26px;padding:28px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin-bottom:22px;overflow:hidden;position:relative}.hero:after{content:'🇩🇪';position:absolute;right:145px;bottom:-32px;font-size:115px;opacity:.10}.hero h2{font-size:clamp(28px,4vw,46px);margin:0 0 8px}.hero p{margin:0;opacity:.88}.lesson-nav{display:flex;gap:7px;align-items:center;z-index:1}.lesson-nav button{border:0;border-radius:11px;padding:10px 13px;background:rgba(255,255,255,.17);color:white}.lesson-nav button:hover{background:rgba(255,255,255,.27)}
+    .grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr);gap:20px}.column{display:grid;gap:18px;align-content:start}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 20px}.card-head h3{margin:0;font-size:22px}.card-body{padding:0 20px 20px}
+    .accordion-toggle{width:100%;border:0;background:white;text-align:left}.accordion-toggle:hover{background:#fbfdfe}.chev{transition:.2s;font-size:20px}.collapsed .chev{transform:rotate(-90deg)}.collapsed + .card-body{display:none}
+    .schedule{display:grid;gap:8px}.schedule-row{display:grid;grid-template-columns:44px 1fr 90px 38px;gap:10px;align-items:center;padding:11px;border-radius:13px;background:#f6fafb}.schedule-row.done{opacity:.52;text-decoration:line-through}.schedule-row input[type=checkbox]{width:22px;height:22px;accent-color:var(--green)}.schedule-row input[type=text],.schedule-row input[type=number]{width:100%;border:0;background:transparent;color:var(--ink);padding:4px}.schedule-row input[type=number]{text-align:right}.mini-remove{border:0;background:transparent;color:#aab8bf;font-size:20px}.mini-remove:hover{color:var(--red)}
+    .editable-list{margin:0;padding-left:23px}.editable-list li{padding:5px 3px}.editable-list li:focus,.editable-text:focus{outline:2px solid #9bd1eb;border-radius:5px;background:#f9fdff}
+    .editable-text{min-height:70px;white-space:pre-wrap;line-height:1.5}
+    .homework{background:linear-gradient(135deg,#fff8db,#fffdf3);border-color:#f4d477}.homework .card-head{background:rgba(255,209,102,.16)}
+    .timer-display{text-align:center;font-size:clamp(54px,7vw,85px);font-weight:900;letter-spacing:2px;font-variant-numeric:tabular-nums;color:var(--navy);margin:6px 0 12px}.timer-display.finished{color:var(--red);animation:pulse .8s infinite alternate}@keyframes pulse{to{transform:scale(1.04)}}
+    .timer-presets,.button-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.timer-presets button{border:1px solid var(--line);background:white;border-radius:999px;padding:7px 12px}.timer-presets button:hover{background:var(--sky)}
+    .student-result{text-align:center;min-height:62px;font-size:35px;font-weight:900;color:var(--blue);padding:8px}.center{text-align:center}.hint{font-size:13px;color:var(--muted)}
+    textarea,input[type=text],input[type=url],input[type=number],select{border:1px solid var(--line);border-radius:10px;padding:10px;background:white;color:var(--ink)}textarea{width:100%;resize:vertical}.student-area{min-height:110px}
+    .traffic{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.light{border:4px solid transparent;border-radius:18px;padding:21px 5px;color:white;font-weight:900;opacity:.35}.light.active{opacity:1;border-color:var(--ink);transform:scale(1.03)}.light.red{background:#d94c3a}.light.orange{background:#e9a32d}.light.green{background:#2a9d68}
+    .materials{display:grid;gap:9px}.material-row{display:grid;grid-template-columns:1fr 1.4fr 36px;gap:7px}.material-row input{width:100%}.material-link{display:inline-flex;align-items:center;gap:8px;margin:5px 7px 5px 0;padding:8px 11px;border-radius:10px;background:var(--sky);color:var(--blue);text-decoration:none;font-weight:700}.material-link:hover{filter:brightness(.96)}
+    .groups{display:grid;gap:10px}.group{background:#f5fafc;border-left:5px solid var(--blue);border-radius:12px;padding:11px}.group strong{display:block;margin-bottom:4px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(12,31,43,.65);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}.modal-backdrop.show{display:flex}.modal{background:white;border-radius:22px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:25px;box-shadow:0 25px 70px rgba(0,0,0,.3)}.modal h2{margin-top:0}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form-field{display:grid;gap:6px}.form-field.full{grid-column:1/-1}.form-field label{font-weight:800;font-size:14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+    .toast{position:fixed;right:20px;bottom:20px;background:#173b57;color:white;padding:12px 17px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(20px);pointer-events:none;transition:.25s;z-index:200}.toast.show{opacity:1;transform:none}
+    .presentation .sidebar{display:none}.presentation .app{grid-template-columns:1fr}.presentation .main{padding:18px 3vw}.presentation .top-actions .hide-present{display:none}.presentation .hint{display:none}
+    body.dark{--card:#173442;--bg:#0e2531;--ink:#eef8fb;--muted:#a9c1cc;--line:#315260;--sky:#1d485b;--cream:#243f49;--shadow:0 10px 28px rgba(0,0,0,.22)}body.dark .accordion-toggle,body.dark input,body.dark textarea,body.dark select,body.dark .timer-presets button{background:var(--card);color:var(--ink)}body.dark .schedule-row,body.dark .group{background:#1b3d4c}body.dark .homework{background:#3b3520}
+    @media(max-width:980px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto;padding:14px 18px}.brand{margin-bottom:10px}.class-switch{margin:8px 0}.nav,.side-footer{display:none}.main{padding:16px}.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.hero:after{right:20px}.topbar{flex-direction:column}.top-actions{justify-content:flex-start}}
+    @media(max-width:600px){:root{--font-size:16px}.form-grid{grid-template-columns:1fr}.form-field.full{grid-column:auto}.schedule-row{grid-template-columns:34px 1fr 70px 30px}.material-row{grid-template-columns:1fr 32px}.material-row input:nth-child(2){grid-column:1/-1;grid-row:2}.hero{padding:20px}.main{padding:10px}.card-head{padding:15px}.card-body{padding:0 15px 15px}}
+    @media print{.sidebar,.top-actions,.lesson-nav,.timer-presets,.button-row,.hint,.mini-remove{display:none!important}.app{display:block}.main{padding:0}.grid{grid-template-columns:1fr}.card{break-inside:avoid;box-shadow:none}.collapsed + .card-body{display:block}.hero{color:black;background:white;border:2px solid #173b57}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">🇩🇪</div><div><h1>LesDashboard Pro</h1><small>Duits • H2 & H3</small></div></div>
+    <div class="class-switch"><button class="class-btn active" data-class="H2">H2</button><button class="class-btn" data-class="H3">H3</button></div>
+    <nav class="nav">
+      <button class="nav-btn active" data-scroll="today">🏠 Vandaag</button>
+      <button class="nav-btn" data-scroll="goals">🎯 Leerdoelen</button>
+      <button class="nav-btn" data-scroll="explanation">📖 Uitleg</button>
+      <button class="nav-btn" data-scroll="activity">🎮 In de klas</button>
+      <button class="nav-btn" data-scroll="homework">📝 Huiswerk</button>
+      <button class="nav-btn" data-scroll="tools">⏱️ Leshulpen</button>
+      <button class="nav-btn" data-scroll="materials">📂 Materialen</button>
+    </nav>
+    <div class="side-footer">
+      <button class="side-action" id="editLessonSide">✏️ Les bewerken</button>
+      <button class="side-action" id="newLesson">➕ Nieuwe les</button>
+      <button class="side-action" id="exportData">⬇️ Back-up downloaden</button>
+      <button class="side-action" id="importData">⬆️ Back-up importeren</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><div class="date-de" id="germanDate"></div><div class="date-nl" id="dutchDate"></div></div>
+      <div class="top-actions">
+        <button class="icon-btn hide-present" id="fontMinus" title="Tekst kleiner">A−</button>
+        <button class="icon-btn hide-present" id="fontPlus" title="Tekst groter">A+</button>
+        <button class="icon-btn hide-present" id="darkMode" title="Donkere modus">🌙</button>
+        <button class="icon-btn hide-present" id="printBtn" title="Afdrukken">🖨️</button>
+        <button class="primary" id="presentationBtn">🖥️ Presentatiemodus</button>
+      </div>
+    </div>
+
+    <section class="hero" id="today">
+      <div><p id="heroMeta">H2 • Les 1</p><h2 id="lessonTitle">Kapitel 1 • Lektion 1</h2><p id="lessonSubtitle">Welkom bij de les Duits</p></div>
+      <div class="lesson-nav"><button id="prevLesson" title="Vorige les">◀</button><button id="lessonCounter">1 / 1</button><button id="nextLesson" title="Volgende les">▶</button></div>
+    </section>
+
+    <div class="grid">
+      <div class="column">
+        <section class="card">
+          <div class="card-head"><h3>📌 Lesopbouw</h3><button class="secondary" id="addSchedule">+ Onderdeel</button></div>
+          <div class="card-body"><div class="schedule" id="scheduleList"></div><p class="hint">Vink onderdelen af tijdens de les. Tekst en minuten kun je direct aanpassen.</p></div>
+        </section>
+
+        <section class="card" id="goals">
+          <button class="card-head accordion-toggle"><h3>🎯 Leerdoelen</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><ul class="editable-list" id="goalsList"></ul><button class="secondary" data-add-list="goals">+ Leerdoel</button></div>
+        </section>
+
+        <section class="card" id="explanation">
+          <button class="card-head accordion-toggle"><h3>📖 Uitleg</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><div class="editable-text" id="explanationText" contenteditable="true"></div><p class="hint">Klik in de tekst om de uitleg direct te bewerken.</p></div>
+        </section>
+
+        <section class="card" id="activity">
+          <button class="card-head accordion-toggle"><h3>🎮 In de klas</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><div class="editable-text" id="activityText" contenteditable="true"></div><p class="hint">Noteer hier de werkvorm, stappen en benodigde materialen.</p></div>
+        </section>
+
+        <section class="card homework" id="homework">
+          <button class="card-head accordion-toggle"><h3>📝 Huiswerk</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><div class="editable-text" id="homeworkText" contenteditable="true"></div></div>
+        </section>
+
+        <section class="card" id="materials">
+          <button class="card-head accordion-toggle"><h3>📂 Materialen en links</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><div id="materialLinks"></div><div class="materials" id="materialsEditor"></div><button class="secondary" id="addMaterial">+ Link toevoegen</button><p class="hint">Gebruik volledige links die beginnen met https://. Lokale bestanden kunnen niet blijvend in de site worden opgeslagen.</p></div>
+        </section>
+
+        <section class="card">
+          <button class="card-head accordion-toggle collapsed"><h3>🗒️ Privénotities docent</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><textarea id="teacherNotes" rows="6" placeholder="Bijvoorbeeld: afwezigen, inhaalwerk, aandachtspunten..."></textarea><p class="hint">Deze notities blijven alleen in deze browser opgeslagen.</p></div>
+        </section>
+      </div>
+
+      <div class="column" id="tools">
+        <section class="card">
+          <div class="card-head"><h3>⏱️ Timer</h3></div>
+          <div class="card-body"><div class="timer-display" id="timerDisplay">05:00</div><div class="timer-presets"><button data-minutes="1">1 min</button><button data-minutes="5">5 min</button><button data-minutes="10">10 min</button><button data-minutes="15">15 min</button></div><div class="button-row" style="margin-top:12px"><button class="primary" id="timerStart">Start</button><button class="secondary" id="timerPause">Pauze</button><button class="secondary" id="timerReset">Reset</button></div></div>
+        </section>
+
+        <section class="card">
+          <div class="card-head"><h3>🚦 Werkgeluid</h3></div>
+          <div class="card-body"><div class="traffic"><button class="light red" data-light="red">STIL</button><button class="light orange" data-light="orange">FLUISTER</button><button class="light green active" data-light="green">OVERLEG</button></div></div>
+        </section>
+
+        <section class="card">
+          <button class="card-head accordion-toggle"><h3>🎲 Leerlingkiezer</h3><span class="chev">⌄</span></button>
+          <div class="card-body center"><div class="student-result" id="studentResult">Wie is aan de beurt?</div><button class="primary" id="pickStudent">Kies leerling</button><details style="margin-top:14px"><summary>Leerlingenlijst aanpassen</summary><textarea class="student-area" id="studentList" placeholder="Eén naam per regel"></textarea></details></div>
+        </section>
+
+        <section class="card">
+          <button class="card-head accordion-toggle collapsed"><h3>👥 Groepenmaker</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><div class="button-row"><label>Aantal groepen <input type="number" id="groupCount" value="4" min="2" max="12" style="width:75px"></label><button class="primary" id="makeGroups">Maak groepen</button></div><div class="groups" id="groupsResult" style="margin-top:13px"></div></div>
+        </section>
+
+        <section class="card">
+          <button class="card-head accordion-toggle collapsed"><h3>🔥 Wort des Tages</h3><span class="chev">⌄</span></button>
+          <div class="card-body"><input type="text" id="wordGerman" placeholder="Duits woord" style="width:100%;margin-bottom:8px"><input type="text" id="wordDutch" placeholder="Nederlandse betekenis" style="width:100%"><div class="student-result" id="wordDisplay" style="font-size:25px"></div></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="lessonModal"><div class="modal"><h2 id="modalTitle">Les bewerken</h2><div class="form-grid"><div class="form-field"><label>Klas</label><select id="formClass"><option>H2</option><option>H3</option></select></div><div class="form-field"><label>Lesnummer</label><input type="number" id="formNumber" min="1"></div><div class="form-field full"><label>Titel</label><input type="text" id="formTitle"></div><div class="form-field full"><label>Ondertitel</label><input type="text" id="formSubtitle"></div></div><div class="modal-actions"><button class="danger" id="deleteLesson">Verwijder les</button><button class="secondary" id="cancelModal">Annuleren</button><button class="primary" id="saveModal">Opslaan</button></div></div></div>
+<div class="toast" id="toast">Opgeslagen</div>
+
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY='lesdashboard-pro-v1';
+  const defaults={
+    currentClass:'H2', currentIndex:{H2:0,H3:0}, fontSize:18, dark:false,
+    students:{H2:['Leerling 1','Leerling 2','Leerling 3','Leerling 4','Leerling 5'],H3:['Leerling 1','Leerling 2','Leerling 3','Leerling 4','Leerling 5']},
+    lessons:{
+      H2:[{id:cryptoId(),number:1,title:'Kapitel 1 • Lektion 1',subtitle:'Welkom bij de les Duits',schedule:[['Welkom en spullen klaar',5],['Voorkennis activeren',5],['Uitleg',10],['Oefenen',15],['Afsluiting en huiswerk',5]],goals:['Ik kan de woorden van deze les herkennen.','Ik kan de kern van een korte Duitse tekst begrijpen.','Ik weet wat ik voor de volgende les moet doen.'],explanation:'Plaats hier je korte uitleg. Je kunt deze tekst direct aanklikken en aanpassen.',activity:'Actieve opdracht: laat leerlingen woorden en betekenissen aan elkaar koppelen. Bespreek daarna klassikaal de antwoorden.',homework:'Lernliste leren en de afgesproken opdrachten maken.',materials:[],notes:'',word:['lernen','leren']}],
+      H3:[{id:cryptoId(),number:1,title:'Kapitel 1 • Start',subtitle:'Herhalen, verdiepen en toepassen',schedule:[['Binnenkomst en startvraag',5],['Herhaling',10],['Nieuwe uitleg',10],['Duo-opdracht',15],['Exit-ticket en huiswerk',5]],goals:['Ik kan voorkennis uit H2 activeren.','Ik kan de nieuwe taalregel toepassen.','Ik kan mijn antwoord kort toelichten.'],explanation:'Noteer hier de uitleg voor H3. Gebruik korte stappen en enkele duidelijke voorbeelden.',activity:'Werk in tweetallen. Vergelijk antwoorden en verbeter samen één voorbeeldzin.',homework:'Herhaal de woorden en maak de afgesproken opdrachten.',materials:[],notes:'',word:['wiederholen','herhalen']}]
+    }
+  };
+  let state=load(); let timerSeconds=300,timerInitial=300,timerId=null;
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  function cryptoId(){return 'l'+Math.random().toString(36).slice(2)+Date.now().toString(36)}
+  function clone(v){return JSON.parse(JSON.stringify(v))}
+  function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY));return x&&x.lessons?merge(defaults,x):clone(defaults)}catch(e){return clone(defaults)}}
+  function merge(base,saved){const out=clone(base);Object.assign(out,saved);out.lessons={H2:saved.lessons?.H2||out.lessons.H2,H3:saved.lessons?.H3||out.lessons.H3};out.students={H2:saved.students?.H2||out.students.H2,H3:saved.students?.H3||out.students.H3};return out}
+  function save(show=false){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));if(show)toast('Opgeslagen in deze browser')}
+  function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),1800)}
+  function lesson(){const a=state.lessons[state.currentClass];if(!a.length)a.push(newLesson(state.currentClass));state.currentIndex[state.currentClass]=Math.max(0,Math.min(state.currentIndex[state.currentClass]||0,a.length-1));return a[state.currentIndex[state.currentClass]]}
+  function newLesson(c){return{id:cryptoId(),number:(state.lessons[c]?.length||0)+1,title:'Nieuwe les',subtitle:'Vul hier het onderwerp in',schedule:[['Start',5],['Uitleg',10],['Oefenen',20],['Afsluiting',5]],goals:['Vul hier een leerdoel in.'],explanation:'Klik om de uitleg te bewerken.',activity:'Klik om de klassikale activiteit te bewerken.',homework:'Vul hier het huiswerk in.',materials:[],notes:'',word:['','']}}
+  function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+  function render(){const l=lesson(),arr=state.lessons[state.currentClass],i=state.currentIndex[state.currentClass];$$('.class-btn').forEach(b=>b.classList.toggle('active',b.dataset.class===state.currentClass));$('#heroMeta').textContent=`${state.currentClass} • Les ${l.number}`;$('#lessonTitle').textContent=l.title;$('#lessonSubtitle').textContent=l.subtitle;$('#lessonCounter').textContent=`${i+1} / ${arr.length}`;renderSchedule(l);renderList(l);$('#explanationText').textContent=l.explanation;$('#activityText').textContent=l.activity;$('#homeworkText').textContent=l.homework;$('#teacherNotes').value=l.notes||'';renderMaterials(l);$('#studentList').value=(state.students[state.currentClass]||[]).join('\n');$('#wordGerman').value=l.word?.[0]||'';$('#wordDutch').value=l.word?.[1]||'';renderWord();document.documentElement.style.setProperty('--font-size',(state.fontSize||18)+'px');document.body.classList.toggle('dark',!!state.dark)}
+  function renderSchedule(l){$('#scheduleList').innerHTML=l.schedule.map((x,i)=>`<div class="schedule-row ${x[2]?'done':''}"><input type="checkbox" data-sch-check="${i}" ${x[2]?'checked':''}><input type="text" value="${esc(x[0])}" data-sch-text="${i}" aria-label="Lesonderdeel"><label><input type="number" min="0" value="${Number(x[1])||0}" data-sch-min="${i}" aria-label="Minuten"> min</label><button class="mini-remove" data-sch-remove="${i}" title="Verwijderen">×</button></div>`).join('')}
+  function renderList(l){$('#goalsList').innerHTML=(l.goals||[]).map((g,i)=>`<li contenteditable="true" data-goal="${i}">${esc(g)}</li>`).join('')}
+  function renderMaterials(l){$('#materialLinks').innerHTML=(l.materials||[]).filter(x=>x[0]&&/^https?:\/\//i.test(x[1])).map(x=>`<a class="material-link" target="_blank" rel="noopener" href="${esc(x[1])}">🔗 ${esc(x[0])}</a>`).join('');$('#materialsEditor').innerHTML=(l.materials||[]).map((x,i)=>`<div class="material-row"><input type="text" value="${esc(x[0])}" data-mat-name="${i}" placeholder="Naam"><input type="url" value="${esc(x[1])}" data-mat-url="${i}" placeholder="https://..."><button class="mini-remove" data-mat-remove="${i}">×</button></div>`).join('')}
+  function renderWord(){const a=$('#wordGerman').value.trim(),b=$('#wordDutch').value.trim();$('#wordDisplay').textContent=a?(a+(b?' = '+b:'')):''}
+  function updateDate(){const d=new Date(),days=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],months=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];$('#germanDate').textContent=`${days[d.getDay()]}, ${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;$('#dutchDate').textContent=d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+  function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+  function updateTimer(){const m=Math.floor(timerSeconds/60),s=timerSeconds%60;$('#timerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('#timerDisplay').classList.toggle('finished',timerSeconds===0)}
+  function stopTimer(){clearInterval(timerId);timerId=null}
+  $$('.class-btn').forEach(b=>b.onclick=()=>{state.currentClass=b.dataset.class;save();render();$('#studentResult').textContent='Wie is aan de beurt?';$('#groupsResult').innerHTML=''});
+  $$('.nav-btn').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.scroll)?.scrollIntoView({behavior:'smooth',block:'start'}));
+  $$('.accordion-toggle').forEach(b=>b.onclick=()=>b.classList.toggle('collapsed'));
+  $('#prevLesson').onclick=()=>{state.currentIndex[state.currentClass]=Math.max(0,state.currentIndex[state.currentClass]-1);save();render()};$('#nextLesson').onclick=()=>{state.currentIndex[state.currentClass]=Math.min(state.lessons[state.currentClass].length-1,state.currentIndex[state.currentClass]+1);save();render()};
+  $('#scheduleList').addEventListener('input',e=>{const l=lesson();if(e.target.dataset.schText!==undefined)l.schedule[+e.target.dataset.schText][0]=e.target.value;if(e.target.dataset.schMin!==undefined)l.schedule[+e.target.dataset.schMin][1]=+e.target.value;save()});
+  $('#scheduleList').addEventListener('change',e=>{if(e.target.dataset.schCheck!==undefined){lesson().schedule[+e.target.dataset.schCheck][2]=e.target.checked;save();renderSchedule(lesson())}});
+  $('#scheduleList').addEventListener('click',e=>{if(e.target.dataset.schRemove!==undefined){lesson().schedule.splice(+e.target.dataset.schRemove,1);save();renderSchedule(lesson())}});
+  $('#addSchedule').onclick=()=>{lesson().schedule.push(['Nieuw onderdeel',5,false]);save();renderSchedule(lesson())};
+  $('#goalsList').addEventListener('input',e=>{if(e.target.dataset.goal!==undefined){lesson().goals[+e.target.dataset.goal]=e.target.textContent;save()}});$('[data-add-list="goals"]').onclick=()=>{lesson().goals.push('Nieuw leerdoel');save();renderList(lesson())};
+  [['#explanationText','explanation'],['#activityText','activity'],['#homeworkText','homework']].forEach(([id,key])=>$(id).addEventListener('input',e=>{lesson()[key]=e.target.innerText;save()}));
+  $('#teacherNotes').oninput=e=>{lesson().notes=e.target.value;save()};
+  $('#addMaterial').onclick=()=>{lesson().materials.push(['Nieuwe link','']);save();renderMaterials(lesson())};$('#materialsEditor').addEventListener('input',e=>{const l=lesson();if(e.target.dataset.matName!==undefined)l.materials[+e.target.dataset.matName][0]=e.target.value;if(e.target.dataset.matUrl!==undefined)l.materials[+e.target.dataset.matUrl][1]=e.target.value;save();renderMaterials(l)});$('#materialsEditor').addEventListener('click',e=>{if(e.target.dataset.matRemove!==undefined){lesson().materials.splice(+e.target.dataset.matRemove,1);save();renderMaterials(lesson())}});
+  $('#studentList').oninput=e=>{state.students[state.currentClass]=e.target.value.split('\n').map(x=>x.trim()).filter(Boolean);save()};$('#pickStudent').onclick=()=>{const a=state.students[state.currentClass]||[];$('#studentResult').textContent=a.length?a[Math.floor(Math.random()*a.length)]:'Voeg eerst namen toe'};$('#makeGroups').onclick=()=>{const names=shuffle(state.students[state.currentClass]||[]),n=Math.max(2,Math.min(12,+$('#groupCount').value||4)),groups=Array.from({length:Math.min(n,Math.max(1,names.length))},()=>[]);names.forEach((x,i)=>groups[i%groups.length].push(x));$('#groupsResult').innerHTML=names.length?groups.map((g,i)=>`<div class="group"><strong>Groep ${i+1}</strong>${g.map(esc).join('<br>')}</div>`).join(''):'Voeg eerst namen toe.'};
+  $$('.timer-presets button').forEach(b=>b.onclick=()=>{stopTimer();timerInitial=timerSeconds=+b.dataset.minutes*60;updateTimer()});$('#timerStart').onclick=()=>{if(timerId||timerSeconds<=0)return;timerId=setInterval(()=>{timerSeconds--;updateTimer();if(timerSeconds<=0){stopTimer();try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=740;g.gain.value=.08;o.start();o.stop(c.currentTime+.5)}catch(e){}}},1000)};$('#timerPause').onclick=stopTimer;$('#timerReset').onclick=()=>{stopTimer();timerSeconds=timerInitial;updateTimer()};
+  $$('.light').forEach(b=>b.onclick=()=>{$$('.light').forEach(x=>x.classList.remove('active'));b.classList.add('active')});
+  function saveWord(){lesson().word=[$('#wordGerman').value,$('#wordDutch').value];save();renderWord()}$('#wordGerman').oninput=saveWord;$('#wordDutch').oninput=saveWord;
+  $('#fontPlus').onclick=()=>{state.fontSize=Math.min(24,(state.fontSize||18)+1);save();render()};$('#fontMinus').onclick=()=>{state.fontSize=Math.max(14,(state.fontSize||18)-1);save();render()};$('#darkMode').onclick=()=>{state.dark=!state.dark;save();render()};$('#printBtn').onclick=()=>window.print();$('#presentationBtn').onclick=async()=>{document.body.classList.toggle('presentation');$('#presentationBtn').textContent=document.body.classList.contains('presentation')?'↩️ Terug naar dashboard':'🖥️ Presentatiemodus';try{if(document.body.classList.contains('presentation')&&!document.fullscreenElement)await document.documentElement.requestFullscreen();else if(document.fullscreenElement)await document.exitFullscreen()}catch(e){}};
+  const modal=$('#lessonModal');function openModal(isNew=false){const l=isNew?newLesson(state.currentClass):lesson();modal.dataset.mode=isNew?'new':'edit';modal.dataset.id=l.id;$('#modalTitle').textContent=isNew?'Nieuwe les':'Les bewerken';$('#formClass').value=state.currentClass;$('#formNumber').value=l.number;$('#formTitle').value=l.title;$('#formSubtitle').value=l.subtitle;$('#deleteLesson').style.display=isNew?'none':'';modal.classList.add('show')}
+  $('#editLessonSide').onclick=()=>openModal(false);$('#lessonTitle').onclick=()=>openModal(false);$('#newLesson').onclick=()=>openModal(true);$('#cancelModal').onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')};$('#saveModal').onclick=()=>{const c=$('#formClass').value,isNew=modal.dataset.mode==='new';let l=isNew?newLesson(c):lesson();l.number=+$('#formNumber').value||1;l.title=$('#formTitle').value.trim()||'Naamloze les';l.subtitle=$('#formSubtitle').value.trim();if(isNew){state.lessons[c].push(l);state.currentClass=c;state.currentIndex[c]=state.lessons[c].length-1}else if(c!==state.currentClass){state.lessons[state.currentClass].splice(state.currentIndex[state.currentClass],1);state.lessons[c].push(l);state.currentClass=c;state.currentIndex[c]=state.lessons[c].length-1}save(true);modal.classList.remove('show');render()};$('#deleteLesson').onclick=()=>{const a=state.lessons[state.currentClass];if(a.length===1){toast('Er moet minimaal één les per klas blijven');return}a.splice(state.currentIndex[state.currentClass],1);state.currentIndex[state.currentClass]=Math.max(0,state.currentIndex[state.currentClass]-1);save(true);modal.classList.remove('show');render()};
+  $('#exportData').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='lesdashboard-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Back-up gedownload')};$('#importData').onclick=()=>$('#importFile').click();$('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(!data.lessons?.H2||!data.lessons?.H3)throw Error();state=merge(defaults,data);save();render();toast('Back-up geïmporteerd')}catch(err){toast('Dit is geen geldige back-up')}};r.readAsText(f);e.target.value=''};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('show'))modal.classList.remove('show')});
+  updateDate();updateTimer();render();
+})();
+</script>
+</body>
+</html>
